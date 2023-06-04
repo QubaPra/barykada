@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Barykada</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <table id="arkusz-table">
+    <!-- Tutaj zostanie wygenerowana tabela -->
+  </table>
+
+  <script>
+    $(document).ready(function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var searchValue = urlParams.get("search");
+      var id = "";
+
+      if (searchValue !== null) {
+        id = searchValue;
+      }
+
+      var url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSP8edhewJtAiYJ4E3Mc2DSq_3YGIU9uT1KzfTuCQi87l6Qv6b5VmchkJkR2KC0mapIFGmBdmLYskm6/pub?gid=0&single=true&output=csv";
+
+      $.get(url, function(data) {
+        var rows = data.split("\n");
+
+        for (var i = 0; i < rows.length; i++) {
+          var cells = rows[i].split(",");
+          if (((cells[0] + cells[1]).toLowerCase() === id.toLowerCase())) {
+            var stopien = cells[7];
+
+            switch (stopien) {
+              case "młodzik":
+                url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTHpY88ML2q8-Xh6MvcqKmaagvDVHxHMRSUbn9E3ycTrYuoOsBY_5td4iztO0XbeaiMPrUkWkup_dwQ/pub?gid=0&single=true&output=tsv";
+                $.get(url, function(data) {
+                  var rows = data.split("\n");
+                  var table = $("#arkusz-table");
+
+                  for (var i = 1; i < rows.length; i++) {
+                    var cells = rows[i].split("\t");
+                    var row = $("<tr></tr>");
+
+                    var indexCell = $("<td></td>").text((i) + ". "); // Dodawanie numeracji
+                    row.append(indexCell);                    
+
+                    var cell = $("<td></td>").text(cells[0]); // Wyświetlanie tylko pierwszej kolumny
+                    row.append(cell);
+
+                    var checkboxCell = $("<td></td>");
+                    var checkbox = $("<input>").attr("type", "checkbox");
+                    checkboxCell.append(checkbox);
+                    row.append(checkboxCell);                    
+
+                    table.append(row);
+                  }
+                });
+
+                break;
+              case "wywiadowca":
+                url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZR_cHvXQ8Lujbnpjt2gLiNZ-8a3V-0j6eJ86cIdIx8Tgoyfwd4ESfuJfJa-PiEXeSN3OdmEgwwlv3/pub?gid=0&single=true&output=tsv";
+                $.get(url, function(data) {
+                  var rows = data.split("\n");
+                  var table = $("#arkusz-table");
+
+                  for (var i = 1; i < rows.length; i++) {
+                    var cells = rows[i].split("\t");
+                    var row = $("<tr></tr>");
+
+                    var indexCell = $("<td></td>").text((i) + ". "); // Dodawanie numeracji
+                    row.append(indexCell);                    
+
+                    var cell = $("<td></td>").text(cells[0]); // Wyświetlanie tylko pierwszej kolumny
+                    row.append(cell);
+
+                    var checkboxCell = $("<td></td>");
+                    var checkbox = $("<input>").attr("type", "checkbox");
+                    checkboxCell.append(checkbox);
+                    row.append(checkboxCell);                    
+
+                    table.append(row);
+                  }
+                });
+                break;
+              case "ćwik":
+                console.log("ćwik");
+                break;
+              case "HO":
+                console.log("HO");
+                break;
+              case "HR":
+                console.log("HR");
+                break;
+              default:
+                console.log("default");
+                break;
+            }
+
+            break; // Przerwij pętlę po znalezieniu odpowiedniego wiersza
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
